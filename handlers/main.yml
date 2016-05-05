@@ -1,0 +1,6 @@
+---
+# handlers file for careerleaf-log-courier
+- name: restart log-courier
+  service:
+    state: restarted
+    name: log-courier

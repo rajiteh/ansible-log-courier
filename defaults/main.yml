@@ -1,0 +1,12 @@
+---
+# defaults file for cl-log-courier
+cl_log_courier_collectors: [ 'localhost:4546' ]
+cl_log_courier_files_default:
+  - paths:
+      - "{{ cl_log_courier_log }}"
+    fields:
+      type: "log-courier"
+  - paths:
+      - "/var/log/syslog"
+    fields:
+      type: "syslog"

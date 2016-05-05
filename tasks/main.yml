@@ -1,0 +1,28 @@
+---
+# tasks file for cl-log-courier
+- name: Add apt repository
+  apt_repository: repo='ppa:devel-k/log-courier'
+
+- name: Install log-courier
+  apt:
+    state: latest
+    pkg: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - log-courier
+  notify: restart log-courier
+
+- name: Upload SSL certificate
+  template:
+    src: log-courier.crt.j2
+    dest: /etc/log-courier/log-courier.crt
+  notify: restart log-courier
+
+- name: Configure for forwarder
+  template:
+    src: log-courier.conf.j2
+    dest: /etc/log-courier/log-courier.conf
+  notify: restart log-courier
+
+- name: Ensure service enabled
+  service: name=log-courier enabled=yes state=running
