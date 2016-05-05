@@ -5,7 +5,7 @@ galaxy_info:
   company:
   license: BSD
   min_ansible_version: 1.2
-
+  dependencies: []
   platforms:
     - name: Ubuntu
       versions:
