@@ -24,6 +24,7 @@
     dest: /etc/default/log-courier
 
 - name: Ensure log-courier log file has correct permissions
+  changed_when: false
   file:
     path={{ cl_log_courier_log }}
     state=touch
@@ -42,6 +43,7 @@
 
 - name: Retrive log file list
   command: python /tmp/generate_log_file_names.py
+  changed_when: false
   sudo: no
   delegate_to: 127.0.0.1
   register: log_file_list_register
