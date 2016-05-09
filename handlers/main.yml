@@ -4,3 +4,9 @@
   service:
     state: restarted
     name: log-courier
+
+- name: reload monit
+  service:
+    name: monit
+    state: reloaded
+  ignore_errors: yes
