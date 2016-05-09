@@ -1,7 +1,7 @@
 ---
 # tasks file for cl-log-courier
 - name: Add apt repository
-  apt_repository: repo='ppa:devel-k/log-courier'
+  apt_repository: repo='ppa:devel-k/log-courier2'
 
 - name: Install log-courier
   apt:
@@ -15,14 +15,56 @@
 - name: Upload SSL certificate
   template:
     src: log-courier.crt.j2
-    dest: /etc/log-courier/log-courier.crt
+    dest: "{{ cl_log_courier_config | dirname }}/log-courier.crt"
   notify: restart log-courier
+
+- name: Setup init.d log-courier defaults
+  template:
+    src: log-courier.default.j2
+    dest: /etc/default/log-courier
+
+- name: Ensure log-courier log file has correct permissions
+  file:
+    path={{ cl_log_courier_log }}
+    state=touch
+    mode="u=rw,g=r,o=r"
+    owner={{ cl_log_courier_user }}
+    group={{ cl_log_courier_user }}
+
+- name: Generate script to gather log file list
+  template:
+    src: generate_log_file_names.py.j2
+    dest: /tmp/generate_log_file_names.py
+  sudo: no
+  delegate_to: 127.0.0.1
+  tags:
+    - log-courier-config
+
+- name: Retrive log file list
+  command: python /tmp/generate_log_file_names.py
+  sudo: no
+  delegate_to: 127.0.0.1
+  register: log_file_list_register
+  tags:
+    - log-courier-config
+
+- set_fact:
+    cl_log_courier_files_combined: '{{ log_file_list_register.stdout }}'
+  tags:
+    - log-courier-config
 
 - name: Configure for forwarder
   template:
     src: log-courier.conf.j2
-    dest: /etc/log-courier/log-courier.conf
+    dest: "{{ cl_log_courier_config }}"
   notify: restart log-courier
-
+  tags:
+    - log-courier-config
 - name: Ensure service enabled
   service: name=log-courier enabled=yes state=running
+
+- name: Set up monit (if configured)
+  template:
+    src: monit.log-courier.conf.j2
+    dest: {{ cl_log_courier_monit_config }}
+  when: cl_log_courier_monit_config_path | defined

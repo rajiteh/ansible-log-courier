@@ -1,0 +1,11 @@
+#/usr/env python
+import json
+original_list = {{ cl_log_courier_files_combined | to_nice_json }}
+
+extra_list = [
+{% for gname in groups %}{% for host in groups[gname] %}{% if hostvars[host]["inventory_hostname"] == inventory_hostname %}{% for log_file_entry in (cl_log_courier_files_grouped[gname] | default([])) %}
+{{ log_file_entry | to_nice_json }},
+{% endfor %}{% endif %}{% endfor %}{% endfor %}
+]
+
+print(json.dumps(original_list + extra_list , indent=2))

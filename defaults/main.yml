@@ -1,12 +1,7 @@
 ---
 # defaults file for cl-log-courier
 cl_log_courier_collectors: [ 'localhost:4546' ]
-cl_log_courier_files_default:
-  - paths:
-      - "{{ cl_log_courier_log }}"
-    fields:
-      type: "log-courier"
-  - paths:
-      - "/var/log/syslog"
-    fields:
-      type: "syslog"
+cl_log_courier_files_default: []
+cl_log_courier_user: root
+cl_log_courier_config: /etc/log-courier/log-courier.conf
+#cl_log_courier_monit_config_path: /etc/monit/conf.d/log-courier.conf

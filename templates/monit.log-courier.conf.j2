@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+# ------------------------------------------
+# Monit configuration file for log-courier
+# ------------------------------------------
+
+check process log-courier with pidfile /var/run/log-courier/log-courier.pid
+   group log-courier
+
+   start program = "/usr/sbin/service log-courier restart"
+   stop  program = "/usr/sbin/service log-courier stop"
+
+   if 5 restarts within 5 cycles then timeout

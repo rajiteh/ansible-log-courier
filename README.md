@@ -17,7 +17,10 @@ Role Variables
 * `cl_log_courier_collectors` : Array of logstash servers
 
 ## Optional
-
+    
+    cl_log_courier_user: "root" # user the collector should run as
+    cl_log_courier_config: "/etc/log-courier/log-courier.conf" # path to the configuration file (and folder) 
+    cl_log_courier_monit_config_path: /etc/monit/conf.d/log-courier.conf # enables monit if defined
     cl_log_courier_log: "/var/log/log-courier.log" # log-courier log file path
     cl_log_courier_log_files: # log files to harvest from
       - paths: # Array of log files

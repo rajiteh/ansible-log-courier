@@ -1,12 +1,14 @@
 # {{ ansible_managed }}
 
+
 {
   "general": {
-    "log file": "{{ cl_log_courier_log }}"
+    "log file": "{{ cl_log_courier_log }}",
+    "persist directory": "/var/lib/log-courier"
   },
   "network": {
     "servers": {{ cl_log_courier_collectors | to_nice_json }},
-    "ssl ca": "/etc/log-courier/log-courier.crt",
+    "ssl ca": "{{ cl_log_courier_config | dirname }}/log-courier.crt",
     "timeout": 15
   },
   "files":  {{ cl_log_courier_files_combined | to_nice_json }}

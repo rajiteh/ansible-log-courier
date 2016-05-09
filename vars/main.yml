@@ -2,3 +2,4 @@
 # vars file for cl-log-courier
 cl_log_courier_log: "/var/log/log-courier.log"
 cl_log_courier_files_combined: "{{ cl_log_courier_files_default + (cl_log_courier_files | default([])) }}"
+extra_logs: []
