@@ -67,5 +67,5 @@
   template:
     src: monit.log-courier.conf.j2
     dest: "{{ cl_log_courier_monit_config }}"
-  when: cl_log_courier_monit_config_path | defined
+  when: cl_log_courier_monit_config is defined
   notify: reload monit
